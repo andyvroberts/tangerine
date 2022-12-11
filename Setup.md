@@ -12,5 +12,16 @@ https://crontab.guru/examples.html
 [TimerTrigger("0 2 * * *")]
 ```
 
+Add csproj references
+````
+dotnet add package Microsoft.Azure.WebJobs.Extensions.Tables --prerelease
+dotnet add package Microsoft.Azure.WebJobs.Extensions.Storage
+```
+  
+T
+
+
+
+
 
 
