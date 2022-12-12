@@ -10,7 +10,7 @@ namespace Bmrs.Models
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
-        public DateOnly Latest { get; set; }
+        public DateTime Latest { get; set; }
         public int Completed { get; set; }
     }
 }
