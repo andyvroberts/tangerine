@@ -10,7 +10,7 @@ Two of the core data series it provides track national energy imbalance:
   
 Both of these series occur at a frequency of 48 times (settlement periods) within every day (settlement day).  
 
-There are two types of system price and volume:  
+There are two types of system/imbalance price and volume:  
 1. Buy price and volume - when there is a shortfall
 2. Sell price and volume - when there is an excess
   

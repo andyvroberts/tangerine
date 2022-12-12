@@ -3,7 +3,7 @@
     "Values": {
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
         "AzureWebJobsStorage": "tangerine storage account",
-        "energyDataStorage": "business data storage account",
-        "bmrsApiKey": "key"
+        "EnergyDataStorage": "business data storage account",
+        "BmrsApiKey": "key"
     }
 }
