@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
-using Microsoft.Extensions.Logging;
 
 namespace Bmrs.Services
 {
@@ -15,6 +14,11 @@ namespace Bmrs.Services
     {
         private static readonly HttpClient client = new HttpClient();
 
+        /// <summary>
+        /// perform the HTTP request from the BMRS API, retrieve one day of imbalance price records.
+        /// Note: Historically there used to be 2 prices (buy & sell), although today only buy prices are created
+        ///   by the balancing mechanism.  This converged the price for MWh irrespective of surpluss or shortfall.
+        /// <summary>
         public static async Task<IEnumerable<ImbalancePriceItem>> BmrsPriceRequestAsync(string apiKey, string settDate)
         {
             List<ImbalancePriceItem> webRecs = new List<ImbalancePriceItem>();
@@ -35,6 +39,11 @@ namespace Bmrs.Services
             return webRecs;
         }
 
+        /// <summary>
+        /// perform the HTTP request from the BMRS API, retrieve one day of imbalance volumes.
+        /// (this code looks duplicate and could be removed by creating a method with generic types.  this has not been 
+        ///  implemented in case of changes to the response from BMRS - which is being replaced by Elexon)
+        /// <summary>
         public static async Task<IEnumerable<ImbalanceVolumeItem>> BmrsVolumeRequestAsync(string apiKey, string settDate)
         {
             List<ImbalanceVolumeItem> webRecs = new List<ImbalanceVolumeItem>();

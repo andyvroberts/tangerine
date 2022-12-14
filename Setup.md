@@ -46,14 +46,18 @@ You can also look at the github function app queue samples.
 https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/storage/Microsoft.Azure.WebJobs.Extensions.Storage.Queues/samples/functionapp
 
 ### Table Storage
-You can do one of these:  
+You can do one of these for input bindings:  
 1. Bind to a storage table and use a TableClient
-2. Bind to an entity within a storage table and use the referenced object (class representing the record) directly
+2. Bind to an entity within a storage table and use the referenced object (class representing the record) directly  
 
-In this example, the use of table storage is limited to reading a configuration record and then updating it at the end of the process.  So in this case, we are binding directly to an entity (record with the table).
+In this example, the first use of table storage is limited to reading a configuration record and then updating it at the end of the process.  So in this case, we are binding directly to an entity (record with the table).  
 
-Note: If the entity of the binding does not exist in the table, the function will error.   The record should always be pre-configured in a new deploymet.   
+Note: If the entity of the binding does not exist in the table, the function will error.   The record should always be pre-configured in a new deploymet.     
 
+Currently output bindings have the restictions:  
+1. Can only be used for insert (not update)  
+
+In this example, our process must be repeatable (idempotent) which means that we our second use of table storage is for 'Upsert' operations.  And for this we will directly use the Azure tables SDK instead of the function app bindings.    
 
 
 
