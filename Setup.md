@@ -59,6 +59,58 @@ Currently output bindings have the restictions:
 
 In this project, our process must be repeatable which means that our second usage of table storage is for 'Upsert' operations.  And for this we will directly use the Azure tables SDK instead of the function app bindings.    
 
+## Bicep
+Read the docs.  
+https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/file
+
+Make sure bicep is installed in the Azure CLI.
+```
+az bicep install && az bicep upgrade
+```
+
+Once you have created the bicep file, you will need to set the default resrouce group within the CLI. By doing this you will not need to specify it on every bicep declaration.  
+```
+az configure --defaults group=Tangerine001
+```
+
+Deploy the bicep file to Azure.  This will have the result of executing the template and creating whatever resources it specifies.  
+```
+az deployment group create --template-file tangerine.bicep
+```
+
+List the contents of the default resource group to see if your resources were created.  
+```
+az deployment group list --output table
+az resource list --output table
+```
+
+## Azure Naming Conventions for Bicep Deployments
+Use the cloud adoption framework standards.  
+https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+
+Also, MS has a set of standard abbreviations for Azure Resource Types:  
+https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+
+In our case we are using these:
+- rg = resource group
+- asp = app service plan
+- st = storage account
+- appi = application insights
+- func = function app  
+   
+### Bicep for Components
+Storage Account:  
+https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep
+
+Application Insights:  
+https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep#applicationinsightscomponentproperties
+
+Function Apps:
+https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep
+
+### Secure Variables
+There are bicep linting rules that prevent you from extracting secrets and passwords, as these can be displayed within log files.  
+https://learn.microsoft.com/en-gb/azure/azure-resource-manager/bicep/linter-rule-outputs-should-not-contain-secrets
 
 
 

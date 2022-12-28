@@ -1,0 +1,24 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgLocation": {
+            "value": "uksouth"
+        },
+        "projShortName": {
+            "value": "tngrn"
+        },        
+        "envType": {
+            "value": "dev"
+        },
+        "resourceTags":{
+            "value": {
+                "Application": "Tangerine",
+                "BusinessUnit": "TMRSM",
+                "IP": "Open Source",
+                "CreatedBy": "Andy Roberts",
+                "ServiceName": "Energy Data"
+            }
+        }
+    }
+}
