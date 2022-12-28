@@ -18,7 +18,7 @@ public String GetSystemPriceWithVolume([TimerTrigger("0 2 * * *", RunOnStartup =
 ```
   
 Add csproj references  
-````
+```
 dotnet add package Microsoft.Azure.WebJobs.Extensions.Tables --prerelease
 dotnet add package Microsoft.Azure.WebJobs.Extensions.Storage.Queues --version 5.0.1
 dotnet add package Microsoft.Azure.WebJobs.Extensions.Storage
@@ -26,7 +26,7 @@ dotnet add package Microsoft.Azure.WebJobs.Extensions.Storage
 
 At this time, the table extensions has a dependancy on azure.data.table version 12.5.  
 
-Somthing else to note, is that this version of webjobs.extensions.tables did not seem to contain the same amount of methods that you get within the azure.data.tables library.  In particular, it would have been nice to see TableClient.GetEntityIfExists() to handle ResourceNotFound errors.  However, this was not possible and so alternative design was required, leading to using a table entity binding.  
+Somthing else to note, is that this version of webjobs.extensions.tables did not seem to contain the same amount of methods that you get within the azure.data.tables library.  In particular, it would have been nice to see TableClient.GetEntityIfExists() to handle ResourceNotFound errors.
 
 
 ## Function Bindings
@@ -57,7 +57,7 @@ Note: If the entity of the binding does not exist in the table, the function wil
 Currently output bindings have the restictions:  
 1. Can only be used for insert (not update)  
 
-In this example, our process must be repeatable (idempotent) which means that we our second use of table storage is for 'Upsert' operations.  And for this we will directly use the Azure tables SDK instead of the function app bindings.    
+In this project, our process must be repeatable which means that our second usage of table storage is for 'Upsert' operations.  And for this we will directly use the Azure tables SDK instead of the function app bindings.    
 
 
 
