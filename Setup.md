@@ -112,5 +112,8 @@ https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites?pivots=dep
 There are bicep linting rules that prevent you from extracting secrets and passwords, as these can be displayed within log files.  
 https://learn.microsoft.com/en-gb/azure/azure-resource-manager/bicep/linter-rule-outputs-should-not-contain-secrets
 
+## Github Actions
+Deploy the bicep files to Azure by using a service principle.
+
 
 

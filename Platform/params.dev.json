@@ -7,17 +7,30 @@
         },
         "projShortName": {
             "value": "tngrn"
-        },        
+        },
         "envType": {
             "value": "dev"
         },
-        "resourceTags":{
+        "businessDataStorageName": {
+            "value": "nrgdxdata002"
+        },
+        "businessDataRg": {
+            "value": "NrgdxData"
+        },
+        "businessDataVaultName": {
+            "value": "NrgdxVault2"
+        },
+        "bmrsApiKeySecretName": {
+            "value": "BmrsApiKey"
+        },
+        "resourceTags": {
             "value": {
                 "Application": "Tangerine",
                 "BusinessUnit": "TMRSM",
                 "IP": "Open Source",
                 "CreatedBy": "Andy Roberts",
-                "ServiceName": "Energy Data"
+                "ServiceName": "Energy Data",
+                "Region": "uksouth"
             }
         }
     }

@@ -7,6 +7,18 @@ param storageAccName string
 param resourceTags object
 param workerRuntime string
 param instrumentationKey string
+param businessDataStorageName string
+param businessDataStorageRg string
+
+// Get a reference to the existing business data storage account
+resource businessData 'Microsoft.Storage/storageAccounts@2019-06-01' existing = {
+  scope: resourceGroup(businessDataStorageRg)
+  name: businessDataStorageName
+}
+
+// ensure the api key is not displayed in logging.
+@secure()
+param bmrsApiKey string
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: appName
@@ -40,6 +52,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: workerRuntime
+        }
+        {
+          name: 'EnergyDataStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${businessData.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(businessData.id, businessData.apiVersion).keys[0].value}'
+        }
+        {
+          name: 'BmrsApiKey'
+          value: bmrsApiKey
         }
       ]
       ftpsState: 'FtpsOnly'

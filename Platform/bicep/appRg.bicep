@@ -26,9 +26,11 @@ param envType string = 'nonprod'
 @description('resource tags are specified in the parameter file params_<env>.json')
 param resourceTags object
 
-var rg_name = 'rg-${projShortName}-${envType}-001'
+param instanceVersion string
 
-// Create the resource group with a usable Label for the reaminder of the file.
+var rg_name = 'rg-${projShortName}-${envType}-${instanceVersion}'
+
+// Create the resource group to contain the Tangerine.
 resource newRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: rg_name
   location: rgLocation
@@ -37,7 +39,7 @@ resource newRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 param storageTypeSku string = (envType == 'prod') ? 'Standard_ZRS' : 'Standard_LRS'
 
-var storage_name = 'st${projShortName}${envType}001'
+var storage_name = 'st${projShortName}${envType}${instanceVersion}'
 
 // Storage account
 module storageAccount 'storageAcc.bicep' = {
@@ -51,7 +53,7 @@ module storageAccount 'storageAcc.bicep' = {
   }
 }
 
-var app_plan_name = 'asp-${projShortName}-${envType}-001'
+var app_plan_name = 'asp-${projShortName}-${envType}-${instanceVersion}'
 
 // Hosting Storage Plan (server farm)
 module hostingPlan 'hostServicePlan.bicep' = {
@@ -64,7 +66,7 @@ module hostingPlan 'hostServicePlan.bicep' = {
   }
 }
 
-var insights_name = 'appi-${projShortName}-${envType}-001'
+var insights_name = 'appi-${projShortName}-${envType}-${instanceVersion}'
 param logRetentionPeriod int = 30
 
 // Application Insights Instance
@@ -85,8 +87,16 @@ var storageAccId = storageAccount.outputs.storageId
 var storageApiVersion = storageAccount.outputs.apiVersion
 var appInsightsInstrKey = appInsights.outputs.instrumentationKey
 
+// need existing resources for application settings (secrets).
+@description('The business data storage account name is needed as a function app setting.')
+param businessDataStorageName string
+@description('the Bmrs API key is required as a function app setting.')
+param businessDataRg string
+param businessDataVaultName string
+param bmrsApiKeySecretName string
+
 @description('The name of the function app that you wish to create.')
-param functionAppName string = 'func-${projShortName}-${envType}-${rgLocation}-001'
+param functionAppName string = 'func-${projShortName}-${envType}-${instanceVersion}'
 
 @description('The language worker runtime to load in the function app.')
 @allowed([
@@ -96,7 +106,14 @@ param functionAppName string = 'func-${projShortName}-${envType}-${rgLocation}-0
 ])
 param runtime string = 'dotnet'
 
-// Application Insights Instance
+// Get the Bmrs API key from the Energy Data key vault.
+// the key vault must have "enabledForTemplateDeployment: true" as a property.
+resource businessVault 'Microsoft.KeyVault/vaults@2016-10-01' existing = {
+  scope: resourceGroup(businessDataRg)
+  name: businessDataVaultName
+}
+
+// Tangerine Function App plust app settings and secrets.
 module functionApp 'funcApp.bicep' = {
   name: 'functionsModule'
   scope: resourceGroup(newRg.name)
@@ -106,9 +123,12 @@ module functionApp 'funcApp.bicep' = {
     storageAccId: storageAccId
     storageAccApiVersion: storageApiVersion
     storageAccName: storage_name
+    businessDataStorageName: businessDataStorageName
+    businessDataStorageRg: businessDataRg
     hostingPlanId: hostingPlanId
     workerRuntime: runtime
     instrumentationKey: appInsightsInstrKey
+    bmrsApiKey: businessVault.getSecret(bmrsApiKeySecretName)
     resourceTags: resourceTags
   }
 }
