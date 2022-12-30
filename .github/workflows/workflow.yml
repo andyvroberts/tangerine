@@ -1,9 +1,11 @@
-name: deploy-azure-resources
+name: deploy azure resources
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch
 
 jobs:
-  job-step-1:
-  runs-on: ubuntu-latest
+  step-1:
+    runs-on: ubuntu-latest
     steps:
-      - run: echo 'The triggering workflow failed'
+      - name: Provide Test Message
+        run: echo 'The triggering workflow ran.'
