@@ -115,5 +115,10 @@ https://learn.microsoft.com/en-gb/azure/azure-resource-manager/bicep/linter-rule
 ## Github Actions
 Deploy the bicep files to Azure by using a service principle.
 
+See the Github action docus:  
+https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+
+
+
 
 
