@@ -8,8 +8,3 @@ jobs:
     steps:
       - run: echo 'The triggering workflow failed'
 
-jobs:
-  deploy-bicep-files:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'The triggering workflow passed'
