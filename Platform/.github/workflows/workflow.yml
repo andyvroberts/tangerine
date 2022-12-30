@@ -1,0 +1,12 @@
+name: deploy-azure-resources
+
+on: [workflow_dispatch]
+
+jobs:
+  bicep_deploy
+
+  runs-on: ubuntu-latest
+
+  steps:
+    - name: 'CLI deployment sub'
+      run: echo "deployed bicep OK."
