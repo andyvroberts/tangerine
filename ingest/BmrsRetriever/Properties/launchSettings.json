@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "BmrsRetriever": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7280",
+      "launchBrowser": false
+    }
+  }
+}
