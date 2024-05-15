@@ -50,11 +50,14 @@ namespace BmrsRetriever
             HttpResponseMessage volumeResponse = await client.GetAsync(uri).ConfigureAwait(false);
             Stream volumeStream = await volumeResponse.Content.ReadAsStreamAsync();
 
-            XmlSerializer ser = new XmlSerializer(typeof(B1780Response), new XmlRootAttribute("response"));
-            var webResults = (B1780Response)ser.Deserialize(volumeStream);
+            XmlSerializer ser = new(typeof(B1780Response), new XmlRootAttribute("response"));
+            var webResults = (B1780Response?)ser.Deserialize(volumeStream);
 
-            if (webResults.IsUsable)
-                webRecs.AddRange(webResults.Body.ItemList.Items);
+            if (webResults != null)
+            {
+                if (webResults?.Body?.ItemList?.Items is not null)
+                    webRecs.AddRange(webResults.Body.ItemList.Items);
+            }
 
             volumeResponse.Dispose();
             return webRecs;

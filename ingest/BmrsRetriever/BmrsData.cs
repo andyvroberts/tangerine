@@ -1,5 +1,4 @@
-using System.Net;
-using System.Xml.Serialization;
+using System;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -9,21 +8,37 @@ namespace BmrsRetriever
     public class BmrsData
     {
         [Function("SystemPrices")]
-        public HttpResponseData SystemPrices(
+        public static async Task SystemPrices(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "systemprice/{year}/{month}")] HttpRequestData req,
-            int year, 
-            int month,
+            string year,
+            string month,
             FunctionContext ctx)
         {
             var _logger = ctx.GetLogger(nameof(SystemPrices));
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            string urlDate = $"{year}-{month:00}-01";
+            string? apiKey = Environment.GetEnvironmentVariable("BmrsApiKey");
+            _logger.LogInformation("Settlement Date = {}", urlDate);
 
-            response.WriteString("Welcome to Azure Functions!");
+            if (apiKey != null)
+            {
+                var prices = await ImbalanceRequests.BmrsPriceRequestAsync(apiKey, urlDate);
+                
+                var periodPrices = prices
+                    .Where(x => x.SettlementPeriod <= 51)
+                    .Select(n => new
+                    {
+                        Series = n.TimeSeriesId,
+                        Price = n.ImbalancePriceAmountGbp
+                    })
+                    .ToList();
 
-            return response;
+                _logger.LogInformation("Found prices\n {}", periodPrices);
+            }
+            else 
+                _logger.LogInformation("No prices found.");
+
         }
 
     }
