@@ -1,4 +1,5 @@
 
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace BmrsRetriever
@@ -199,5 +200,45 @@ namespace BmrsRetriever
         public int DocumentRevNum { get; set; }
         [XmlElement(ElementName = "imbalanceQuantityDirection", IsNullable = true)]
         public string? ImbalanceDirection { get; set; }
+    }
+
+    public class ImbalancePrice
+    {
+        public string? SettlementDate { get; set; }
+        public int SettlementPeriod { get; set; }
+        public string? ImbalanceType { get; set; }
+        public string? TimeSeriesId { get; set; }
+        public string? BusinessType { get; set; }
+        public string? ControlArea { get; set; }
+        public double PriceGbp { get; set; }
+        public string? PriceCategory { get; set; }
+        public string? CurveType { get; set; }
+        public string? Resolution { get; set; }
+        public string? DocumentType { get; set; }
+        public string? ProcessType { get; set; }
+        public string? ActiveFlag { get; set; }
+        public string? Status { get; set; }
+        public string? DocumentId { get; set; }
+        public int RevisionNumber { get; set; }
+    }
+
+    public class ImbalanceVolume
+    {
+        public string? SettlementDate { get; set; }
+        public int SettlementPeriod { get; set; }
+        public string? ImbalanceType { get; set; }
+        public string? TimeSeriesId { get; set; }
+        public string? BusinessType { get; set; }
+        public string? ControlArea { get; set; }
+        public double Quantity { get; set; } 
+        public string? Direction { get; set; }
+        public string? CurveType { get; set; } 
+        public string? Resolution { get; set; } 
+        public string? DocumentType { get; set; } 
+        public string? ProcessType { get; set; } 
+        public string? ActiveFlag { get; set; } 
+        public string? Status { get; set; } 
+        public string? DocumentId { get; set; } 
+        public int RevisionNumber { get; set; } 
     }
 }

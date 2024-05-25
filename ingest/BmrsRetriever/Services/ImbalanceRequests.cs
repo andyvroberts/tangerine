@@ -10,7 +10,7 @@ namespace BmrsRetriever
         /// <summary>
         /// perform the HTTP request from the BMRS API, retrieve one day of imbalance price records.
         /// Note: Historically there used to be 2 prices (buy & sell), although today only buy prices are created
-        ///   by the balancing mechanism.  This converged the price for MWh irrespective of surpluss or shortfall.
+        ///   by the balancing mechanism.  This converged the price for MWh irrespective of surplus or shortfall.
         /// <summary>
         public static async Task<IEnumerable<ImbalancePriceItem>> BmrsPriceRequestAsync(string apiKey, string settDate)
         {
@@ -42,7 +42,7 @@ namespace BmrsRetriever
         /// <summary>
         public static async Task<IEnumerable<ImbalanceVolumeItem>> BmrsVolumeRequestAsync(string apiKey, string settDate)
         {
-            List<ImbalanceVolumeItem> webRecs = new List<ImbalanceVolumeItem>();
+            List<ImbalanceVolumeItem> webRecs = [];
             var uri = Constants.SystemVolume.Replace("<KEY>", apiKey);
             uri = uri.Replace("<SD>", settDate);
             uri = uri.Replace("<SP>", "*");
