@@ -1,5 +1,6 @@
 
 import logging
+import os
 
 log = logging.getLogger("app.src.ui.query.py")
 #---------------------------------------------------------------------------------------#   
@@ -10,7 +11,25 @@ def get_settlement_date():
             None:
             Return: a triple YYYY, mm, dd
     """
-    return '2023', '12', '01'
+    return '2023', '12', '02'
+
+#---------------------------------------------------------------------------------------#   
+def get_price_file_name(file_type):
+    """interact with the UI to find the required file path
+
+        Args:
+            file_type: integer file type.  1 = system price, etc.
+            Return: the fully qualified file path and name.
+    """
+    home_dir = os.path.expanduser('~') + os.path.sep + 'downloads' + os.path.sep
+
+    match file_type:
+        case 1:
+            return home_dir + 'systemprice.parquet';
+        case 2:
+            return home_dir + 'systemvolume.parquet';
+    
+    return home_dir
 
 #---------------------------------------------------------------------------------------#   
 def get_price_url():

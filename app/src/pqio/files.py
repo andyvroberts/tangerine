@@ -4,7 +4,7 @@ import pyarrow as pa
 
 log = logging.getLogger("app.src.io.writer.py")
 #------------------------------------------------------------------------------
-def system_prices(data, location):
+def write_system_prices(data, location):
     """
         format the decoded data into a parquet buffer stream so it can be written
         to a file.
@@ -14,6 +14,7 @@ def system_prices(data, location):
             location: the path and file name
             Return: number of parquet table rows
     """
+    print(type(data))
     log.debug(f'creating parquet file with columns: {data[0].keys()}')
     
     # convert the python dict into pyarrow columnar arrays with schema metadata

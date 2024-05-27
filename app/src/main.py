@@ -3,8 +3,9 @@ import requests
 import time
 import sys
 import os
-
-from ui import query
+import json
+from ui import query as qu
+from pqio import files as fi
 
 
 log = logging.getLogger("bmrs_retriever.main.py")
@@ -20,7 +21,11 @@ def controller():
     start_exec = time.time()
     log.debug(f'executing from path {os.getcwd()}')
 
-    price_df = imbalance_prices()
+    data = imbalance_prices()
+
+    #out_name = qu.get_price_file_name(1)
+    #fi.write_system_prices(data, out_name)
+
 
     end_exec = time.time()
     duration = end_exec - start_exec
@@ -36,17 +41,19 @@ def imbalance_prices():
             None:
             Return: the url of the locally running function app
     """
-    year, month, day = query.get_settlement_date()
-    price_url = query.get_price_url()
+    year, month, day = qu.get_settlement_date()
+    price_url = qu.get_price_url()
 
     run_url = (f'{price_url}/{year}/{month}/{day}')
     log.info(f'Url: {run_url}')
 
-    resp = requests.get(run_url).json()
-    data = resp['Value']
+    resp = requests.get(run_url)
+    #data = json.loads(resp.text)
+    data = resp.json().get('Value')
+    print(type(data))
+    print(data)
 
-    log.info(f'response = {data}')
-
+    return data
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__' :
