@@ -2,9 +2,9 @@ import logging
 import pyarrow.parquet as pq
 import pyarrow as pa
 
-log = logging.getLogger("app.src.io.writer.py")
+log = logging.getLogger("app.src.store.parquet.py")
 #------------------------------------------------------------------------------
-def write_system_prices(data, location):
+def system_prices(data):
     """
         format the decoded data into a parquet buffer stream so it can be written
         to a file.
@@ -39,14 +39,12 @@ def write_system_prices(data, location):
 
     # convert pyarrow arrays to the compressed parquet table
     table = pa.Table.from_pydict(parq_arr)
-    buf = pa.BufferOutputStream()
-    pq.write_table(table, buf)
+    # if you want to create a memory buffer do this:
+    #buf = pa.BufferOutputStream()
+    #pq.write_table(table, buf)
+    #buf_bytes = buf.getvalue().to_pybytes()
     
-    # write file
-    file_name = f"{location}/bmrs_system_prices.parquet"
-    log.debug(f'writing parquet file to {file_name}.')
+    log.debug(f'Created table with {table.num_rows} rows.')
 
-    with open(file_name, "W") as f:
-        f.write(buf.getvalue().to_pybytes())
-
-    return table.num_rows
+    #return buf_bytes
+    return table

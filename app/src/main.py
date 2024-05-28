@@ -3,9 +3,11 @@ import requests
 import time
 import sys
 import os
-import json
+import ast
+import store.files
+import store.parquet
 from ui import query as qu
-from pqio import files as fi
+import store
 
 
 log = logging.getLogger("bmrs_retriever.main.py")
@@ -23,8 +25,9 @@ def controller():
 
     data = imbalance_prices()
 
-    #out_name = qu.get_price_file_name(1)
-    #fi.write_system_prices(data, out_name)
+    out_name = qu.get_price_file_name(1)
+    table = store.parquet.system_prices(data)
+    store.files.write_table(table, out_name)
 
 
     end_exec = time.time()
@@ -48,12 +51,10 @@ def imbalance_prices():
     log.info(f'Url: {run_url}')
 
     resp = requests.get(run_url)
-    #data = json.loads(resp.text)
     data = resp.json().get('Value')
-    print(type(data))
-    print(data)
 
-    return data
+    # must convert the string (json is a string here) into a List of Dicts.
+    return ast.literal_eval(data)
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__' :
