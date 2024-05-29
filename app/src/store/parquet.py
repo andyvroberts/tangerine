@@ -14,7 +14,6 @@ def system_prices(data):
             location: the path and file name
             Return: number of parquet table rows
     """
-    print(type(data))
     log.debug(f'creating parquet file with columns: {data[0].keys()}')
     
     # convert the python dict into pyarrow columnar arrays with schema metadata

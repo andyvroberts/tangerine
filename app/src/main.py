@@ -4,6 +4,8 @@ import time
 import sys
 import os
 import ast
+from calendar import monthrange
+from collections import defaultdict
 import store.files
 import store.parquet
 from ui import query as qu
@@ -23,11 +25,7 @@ def controller():
     start_exec = time.time()
     log.debug(f'executing from path {os.getcwd()}')
 
-    data = imbalance_prices()
-
-    out_name = qu.get_price_file_name(1)
-    table = store.parquet.system_prices(data)
-    store.files.write_table(table, out_name)
+    imbalance_prices()
 
 
     end_exec = time.time()
@@ -44,17 +42,23 @@ def imbalance_prices():
             None:
             Return: the url of the locally running function app
     """
-    year, month, day = qu.get_settlement_date()
+    year, month = qu.get_settlement_month()
+    year_month = f"{year}{month:02d}"
+    num_days = monthrange(year, month)[1]
     price_url = qu.get_price_url()
+    month_of_prices = []
 
-    run_url = (f'{price_url}/{year}/{month}/{day}')
-    log.info(f'Url: {run_url}')
+    for i in range(num_days):
+        run_url = (f"{price_url}/{year}/{month:02d}/{i+1:02d}")
+        log.info(f'url = {run_url}')
+        # get and convert the json string into a List of Dicts.
+        resp = requests.get(run_url)
+        daily = ast.literal_eval(resp.json().get('Value'))
+        month_of_prices.extend(daily)
+        time.sleep(3)
 
-    resp = requests.get(run_url)
-    data = resp.json().get('Value')
-
-    # must convert the string (json is a string here) into a List of Dicts.
-    return ast.literal_eval(data)
+    # write out a parquet file
+    store.files.write_table(store.parquet.system_prices(month_of_prices), qu.get_price_file_name(1, year_month))
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__' :

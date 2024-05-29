@@ -4,17 +4,17 @@ import os
 
 log = logging.getLogger("app.src.ui.query.py")
 #---------------------------------------------------------------------------------------#   
-def get_settlement_date():
+def get_settlement_month():
     """interact with the UI to find the query month
 
         Args:
             None:
-            Return: a triple YYYY, mm, dd
+            Return: a tuple YYYY, mm
     """
-    return '2023', '12', '02'
+    return 2023, 12
 
 #---------------------------------------------------------------------------------------#   
-def get_price_file_name(file_type):
+def get_price_file_name(file_type, year_month):
     """interact with the UI to find the required file path
 
         Args:
@@ -25,9 +25,9 @@ def get_price_file_name(file_type):
 
     match file_type:
         case 1:
-            return home_dir + 'systemprice.parquet';
+            return f'{home_dir}SysPrice-{year_month}.parquet';
         case 2:
-            return home_dir + 'systemvolume.parquet';
+            return f'{home_dir}SysVol-{year_month}.parquet';
     
     return home_dir
 
