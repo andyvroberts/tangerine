@@ -12,6 +12,6 @@ def write_table(tab, location):
             location: the path and file name
             Return: None
     """
-    log.debug(f'writing parquet file to {location}.')
+    log.info(f'writing parquet file to {location}.')
     pq.write_table(tab, location)
  

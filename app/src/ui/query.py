@@ -11,7 +11,7 @@ def get_settlement_month():
             None:
             Return: a tuple YYYY, mm
     """
-    return 2023, 12
+    return 2023, 11
 
 #---------------------------------------------------------------------------------------#   
 def get_price_file_name(file_type, year_month):

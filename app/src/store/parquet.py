@@ -43,7 +43,7 @@ def system_prices(data):
     #pq.write_table(table, buf)
     #buf_bytes = buf.getvalue().to_pybytes()
     
-    log.debug(f'Created table with {table.num_rows} rows.')
+    log.info(f'Created table with {table.num_rows} rows.')
 
     #return buf_bytes
     return table
