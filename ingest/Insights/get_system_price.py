@@ -1,6 +1,5 @@
 import azure.functions as func
-import calendar
-import json
+from utils import common
 import logging
 
 blueprint001 = func.Blueprint()
@@ -16,7 +15,10 @@ async def get_system_price(req: func.HttpRequest) -> str:
     mm = int(_month)
     yyyy = int(_year)
 
-    for dd in range (1, calendar.monthrange(yyyy, mm)[1]):
-        print(f'{url}{yyyy}-{mm:02d}-{dd:02d}')
+    for date_string in common.days_in_month(yyyy, mm):
+        run_url = f'{url}{date_string}'
+        price_list = common.get_data_from_payload(run_url)
+        print(type(price_list))
+        break
 
     return msg
