@@ -14,11 +14,43 @@ async def get_system_price(req: func.HttpRequest) -> str:
 
     mm = int(_month)
     yyyy = int(_year)
+    system_prices = []
 
+    # read all the prices from Elexon API
     for date_string in common.days_in_month(yyyy, mm):
         run_url = f'{url}{date_string}'
         price_list = common.get_data_from_payload(run_url)
+        system_prices.append(price_list)
         print(type(price_list))
         break
+
+    # create the metadata for parquet conversion.
+    # 1 = string, 2 = int32(), 3 = float32(), 4 = bool_()
+    meta_data = [
+        ['settlementDate', 1],
+        ['settlementPeriod', 2],
+        ['startTime', 1],
+        ['createdDateTime', 1],
+        ['systemSellPrice', 3],
+        ['systemBuyPrice', 3],
+        ['bsadDefaulted', 4],
+        ['priceDerivationCode', 1],
+        ['reserveScarcityPrice', 3],
+        ['netImbalanceVolume', 3],
+        ['sellPriceAdjustment', 3],
+        ['buyPriceAdjustment', 3],
+        ['replacementPrice', 3],
+        ['replacementPriceReferenceVolume', 3],
+        ['totalAcceptedOfferVolume', 3],
+        ['totalAcceptedBidVolume', 3],
+        ['totalAdjustmentSellVolume', 3],
+        ['totalAdjustmentBuyVolume', 3],
+        ['totalSystemTaggedAcceptedOfferVolume', 3],
+        ['totalSystemTaggedAcceptedBidVolume', 3],
+        ['totalSystemTaggedAdjustmentSellVolume', 3],
+        ['totalSystemTaggedAdjustmentBuyVolume', 3]
+    ]
+    pq_data = common.create_parquet_buff(system_prices, meta_data)
+    print(len(pq_data))
 
     return msg
