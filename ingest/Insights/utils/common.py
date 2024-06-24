@@ -48,8 +48,6 @@ def create_parquet_buff(data, meta_data):
     field_types = []
 
     for field_name, data_type in meta_data:
-        #x = [y [field_name] for y in data]
-
         if data_type == 1:
             field_types.append(pa.field(field_name, pa.string()))
         if data_type == 2:

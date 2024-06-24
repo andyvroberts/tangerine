@@ -1,14 +1,24 @@
 import azure.functions as func
 from utils import common
+import os
+import ast
 import logging
 
 blueprint001 = func.Blueprint()
 
 @blueprint001.route(route="prices/{year}/{month}", methods=[func.HttpMethod.GET])
 async def get_system_price(req: func.HttpRequest) -> str:
+    lake_writer = os.environ['WriteTo']
+    
+    if lake_writer == 'Lake':
+        import utils.lake_writer as wrw
+    else:
+        import utils.local_writer as wrw
+
     _year = req.route_params.get('year')
     _month = req.route_params.get('month')
     msg = f'Get system prices for {_year}-{_month}.'
+    logging.info(msg)
 
     url = 'https://data.elexon.co.uk/bmrs/api/v1/balancing/settlement/system-prices/'
 
@@ -52,5 +62,9 @@ async def get_system_price(req: func.HttpRequest) -> str:
     ]
     pq_data = common.create_parquet_buff(system_prices, meta_data)
     print(len(pq_data))
+
+    file_name = f'{yyyy}{mm:02d}_disebsp.parquet'
+
+    res = wrw.save_file(pq_data, file_name)
 
     return msg
