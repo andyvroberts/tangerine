@@ -1,7 +1,7 @@
 import azure.functions as func
 from utils import common
 import os
-import ast
+import time
 import logging
 
 blueprint001 = func.Blueprint()
@@ -17,8 +17,6 @@ async def get_system_price(req: func.HttpRequest) -> str:
 
     _year = req.route_params.get('year')
     _month = req.route_params.get('month')
-    msg = f'Get system prices for {_year}-{_month}.'
-    logging.info(msg)
 
     url = 'https://data.elexon.co.uk/bmrs/api/v1/balancing/settlement/system-prices/'
 
@@ -29,10 +27,12 @@ async def get_system_price(req: func.HttpRequest) -> str:
     # read all the prices from Elexon API
     for date_string in common.days_in_month(yyyy, mm):
         run_url = f'{url}{date_string}'
+        logging.debug(date_string)
         price_list = common.get_data_from_payload(run_url)
-        system_prices.append(price_list)
-        print(type(price_list))
-        break
+        system_prices.extend(price_list)
+        time.sleep(1.2)
+
+    logging.info(f'price records: {len(system_prices)}.')
 
     # create the metadata for parquet conversion.
     # 1 = string, 2 = int32(), 3 = float32(), 4 = bool_()
@@ -67,4 +67,6 @@ async def get_system_price(req: func.HttpRequest) -> str:
 
     res = wrw.save_file(pq_data, file_name)
 
+    msg = f'Get system prices for {_year}-{_month}. Found {len(system_prices)} records.'
+    logging.info(msg)
     return msg
