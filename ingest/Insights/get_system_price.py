@@ -4,9 +4,9 @@ import os
 import time
 import logging
 
-blueprint001 = func.Blueprint()
+sysprice = func.Blueprint()
 
-@blueprint001.route(route="prices/{year}/{month}", methods=[func.HttpMethod.GET])
+@sysprice.route(route="prices/{year}/{month}", methods=[func.HttpMethod.GET])
 async def get_system_price(req: func.HttpRequest) -> str:
     lake_writer = os.environ['WriteTo']
     
@@ -61,11 +61,11 @@ async def get_system_price(req: func.HttpRequest) -> str:
         ['totalSystemTaggedAdjustmentBuyVolume', 3]
     ]
     pq_data = common.create_parquet_buff(system_prices, meta_data)
-    print(len(pq_data))
+    logging.debug(f'parquet buffer size = {len(pq_data)}.')
 
     file_name = f'{yyyy}{mm:02d}_disebsp.parquet'
 
-    res = wrw.save_file(pq_data, file_name)
+    _ = wrw.save_file(pq_data, file_name)
 
     msg = f'Get system prices for {_year}-{_month}. Found {len(system_prices)} records.'
     logging.info(msg)

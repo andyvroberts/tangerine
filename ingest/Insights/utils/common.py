@@ -36,12 +36,29 @@ def get_data_from_payload(url):
     return payload
 
 
+def get_payload(url):
+    '''
+    given an Elexon bmrs API, return the payload
+
+    params:
+        url: the full URL to execute
+        return: python list (of dicts)
+    '''
+    webReq = ur.urlopen(url)
+    webData = webReq.read()
+    webDataEncoding = webReq.info().get_content_charset('utf-8')
+    jsonObj = json.loads(webData.decode(webDataEncoding))
+    payload = jsonObj
+
+    return payload
+
+
 def create_parquet_buff(data, meta_data):
     '''
     given a list of dicts and a list of column meta-data, create a parquet table.
 
     params:
-        data: a list of dicts representing one or many API json payloads.
+        data: a list of dicts representing one or many homogenous records.
         meta_data: a list of field metadata: a) the field name b) the field type
         return: memory buffer
     '''
