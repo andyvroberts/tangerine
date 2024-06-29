@@ -1,0 +1,14 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "directories": {
+    "sample": "test app for now"
+  },
+  "scripts": {
+    "sample": "serve sample"
+  },
+  "author": "AVR",
+  "license": "ISC"
+}
