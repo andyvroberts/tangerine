@@ -7,18 +7,34 @@ body {
 }
 
 label {
-    display: block;
-    font-style: italic;
-    margin-bottom: 0.25em;
-  }
-  
-  h1 {
-    font-size: 3.5rem;
-  }
-  
-  button,
-  input {
-    font-family: inherit;
-    padding: 0.25em 0.5em;
-    font-size: 1rem;
-  }
+  display: block;
+  font-style: italic;
+  margin-bottom: 0.25em;
+}
+
+h1 {
+  font-size: 3.5rem;
+} 
+
+li span {
+  margin: 0.3em 0.5em;
+}
+
+button,
+input {
+  font-family: inherit;
+  padding: 0.25em 0.5em;
+  font-size: 1rem;
+}
+
+button:disabled {
+  transition: color 0.5s ease-out;
+}
+
+button:enabled {
+  transition: color 0.5s ease-out;
+}
+
+.done {
+  text-decoration: line-through;
+}
