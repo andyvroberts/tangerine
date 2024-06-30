@@ -8,7 +8,7 @@ sudo apt-get install npm
 ```
 Install the Serve command.  
 ```
-npm install --global serve
+sudo npm install --global serve
 ```
 Now you can run a JS project in folder.  
 ```
